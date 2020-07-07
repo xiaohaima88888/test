@@ -24,12 +24,14 @@ class AdminOperationLog
 
 
     $user_id = 0;
+    
+   // var_dump(Auth::guard("admin")->check());exit();
 
-    if(Auth::check()) {
+    if(Auth::guard("admin")->check()) {
 
-      $user_id = (int) Auth::id();
+      $user_id = Auth::guard("admin")->user()->id;
+     // var_dump($user_id);exit;
 
-    }
 
 
     if('GET' != $request->method()){
@@ -37,7 +39,7 @@ class AdminOperationLog
       $input = $request->all();
 
       $log = new OperationLog(); # 提前创建表、model
-      //var_dump($input);exit;
+     // var_dump($input);exit;
 
       $log->uid = $user_id;
       
@@ -54,6 +56,8 @@ class AdminOperationLog
 
     }
 
+
+    }
 
 
         return $next($request);
