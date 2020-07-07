@@ -50,4 +50,7 @@ Route::get('/logout', "\App\Http\Controllers\LoginController@logout");
 Route::get('/register', "\App\Http\Controllers\RegisterController@index");
 Route::post('/register', "\App\Http\Controllers\RegisterController@register");
 
+Route::post('/log/create', '\App\Api\Controllers\AdminOperationLogController@createlog');
+Route::post('/log/show', '\App\Api\Controllers\AdminOperationLogController@showlog');
+
 include_once("admin.php");

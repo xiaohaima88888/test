@@ -5,6 +5,9 @@ namespace App\Admin\Controllers;
 use Illuminate\Http\Request;
 
 use App\OperationLog;
+use App\AdminUser;
+
+use Illuminate\Support\Facades\Cache;
 
 class LoginController extends Controller
 {
@@ -27,7 +30,26 @@ class LoginController extends Controller
         // var_dump($user);exit;
         if (true == \Auth::guard('admin')->attempt($user)) {
 
+
+
+
         $user_id = \Auth::guard("admin")->user()->id;
+
+
+        $token = self::generateToken();
+
+
+
+         $user = AdminUser::find($user_id);
+         $user->tokens = $token;
+         $user->save();
+ 
+       // var_dump($token);exit();
+
+        Cache::put($token,$user_id,600);
+
+
+        //var_dump(Cache::put($token,$user_id,600));exit();
 
         $input = $request->all();
 
@@ -51,6 +73,15 @@ class LoginController extends Controller
         //var_dump(\Auth::guard("admin")->user()->id);exit();
         return redirect('/admin/home');
         }
+
+
+
+       // var_dump(Cache::put($token,$user_id,600));exit();
+
+
+
+
+
 
         return \Redirect::back()->withErrors("用户名密码错误");
     }
@@ -83,7 +114,24 @@ class LoginController extends Controller
 
 
       \Auth::guard('admin')->logout();
+
+      $user = AdminUser::find($user_id);
+
+      $tokens = $user->tokens;
+
+      Cache::forget($tokens);
+
       return redirect('/admin/login');
+    }
+
+
+        // 生成令牌
+    public static function generateToken()
+    {
+        $randChar = "XtGhtvPn9WlrevgB";
+        $timestamp = $_SERVER['REQUEST_TIME_FLOAT'];
+        $tokenSalt = "h6aw04VI9i0KEoct";
+        return md5($randChar . $timestamp . $tokenSalt);
     }
 
 

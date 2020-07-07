@@ -12,6 +12,7 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        //
+        'http://localhost/log/show',
+        'http://localhost/log/create',
     ];
 }

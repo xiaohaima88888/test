@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 */
+Route::get('/log/create', '\App\APi\Controllers\AdminOperationLogController@createlog');
+Route::post('/log/show', '\App\Api\Controllers\AdminOperationLogController@showlog');
